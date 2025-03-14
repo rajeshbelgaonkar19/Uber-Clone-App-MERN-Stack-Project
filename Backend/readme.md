@@ -19,13 +19,14 @@ The request body should be a JSON object with the following properties:
 
 Example:
 ```json
-user(object):{
-        "fullname": {
-            "firstname": "John",
-            "lastname": "Doe"
-        },
-        "email": "john.doe@example.com",
-        "password": "password123"
+// User (Object)
+    {
+    "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "password": "password123"
     }
 ```
 
