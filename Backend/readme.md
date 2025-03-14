@@ -19,7 +19,7 @@ The request body should be a JSON object with the following properties:
 
 Example:
 ```json
--   `user` (object):{
+`user` (object):{
         "fullname": {
             "firstname": "John",
             "lastname": "Doe"
