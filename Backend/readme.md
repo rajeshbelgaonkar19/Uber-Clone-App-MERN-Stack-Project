@@ -17,9 +17,8 @@ The request body should be a JSON object with the following properties:
 - `email` (string, required): The user's email address (minimum 5 characters, must be a valid email).
 - `password` (string, required): The user's password (minimum 6 characters).
 
-Example:
+Example: User (Object)
 ```json
-// User (Object)
     {
     "fullname": {
         "firstname": "John",
