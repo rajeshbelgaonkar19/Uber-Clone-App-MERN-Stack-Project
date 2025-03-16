@@ -155,3 +155,73 @@ Yes (Valid JWT Token is required in Authorization header or cookie)
 - **401 Unauthorized**: Authentication token is missing or invalid.
 - **500 Internal Server Error**: An error occurred on the server.
 
+---
+
+## Captain Registration Endpoint
+
+### Endpoint
+`POST /captains/register`
+
+### Description
+Registers a new captain by creating a captain account with the provided information. It returns a JSON response containing an authentication token and captain details.
+
+### HTTP Method
+`POST`
+
+### Request Body
+The request body should be a JSON object with the following properties:
+- `fullname` (object):
+  - `firstname` (string, required): Captain's first name (minimum 3 characters).
+  - `lastname` (string, required): Captain's last name (minimum 3 characters).
+- `email` (string, required): Captain's email address (must be a valid email).
+- `password` (string, required): Captain's password (minimum 6 characters).
+- `vehicle` (object):
+  - `color` (string, required): Vehicle color (minimum 3 characters).
+  - `plate` (string, required): Vehicle plate number (minimum 3 characters).
+  - `capacity` (number, required): Vehicle capacity (minimum 1).
+  - `vehicleType` (string, required): Vehicle type (must be one of 'car', 'motorcycle', 'auto').
+
+#### Example Request
+```json
+{
+  "fullname": {
+    "firstname": "Jane",
+    "lastname": "Doe"
+  },
+  "email": "jane.doe@example.com",
+  "password": "password123",
+  "vehicle": {
+    "color": "red",
+    "plate": "XYZ123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+### Response
+#### Success (201 Created)
+```json
+{
+  "token": "jwt_token_here",
+  "captain": {
+    "_id": "captain_id_here",
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Doe"
+    },
+    "email": "jane.doe@example.com",
+    "vehicle": {
+      "color": "red",
+      "plate": "XYZ123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+#### Error Responses
+- **400 Bad Request**: Validation error or missing required fields.
+- **500 Internal Server Error**: An error occurred on the server.
+
