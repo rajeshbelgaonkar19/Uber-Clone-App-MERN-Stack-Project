@@ -1,147 +1,157 @@
-# User Registration Endpoint
+# Backend API Documentation
 
-## Endpoint
+## User Registration Endpoint
+
+### Endpoint
 `POST /users/register`
 
-## Description
-This endpoint registers a new user by accepting their first name, last name, email, and password. It returns a JSON response containing an authentication token and the user details.
+### Description
+Registers a new user by creating a user account with the provided information. It returns a JSON response containing an authentication token and user details.
 
-## HTTP Method
+### HTTP Method
+`POST`
 
-'POST'
-## Request Body
+### Request Body
 The request body should be a JSON object with the following properties:
-- `fullname`: An object containing:
-  - `firstname` (string, required): The user's first name (minimum 3 characters).
-  - `lastname` (string, required): The user's last name (minimum 3 characters).
-- `email` (string, required): The user's email address (minimum 5 characters, must be a valid email).
-- `password` (string, required): The user's password (minimum 6 characters).
+- `fullname` (object):
+  - `firstname` (string, required): User's first name (minimum 3 characters).
+  - `lastname` (string, optional): User's last name (minimum 3 characters).
+- `email` (string, required): User's email address (must be a valid email).
+- `password` (string, required): User's password (minimum 6 characters).
 
-Example: User (Object)
+#### Example Request
 ```json
-    {
-    "fullname": {
-        "firstname": "John",
-        "lastname": "Doe"
-    },
-    "email": "john.doe@example.com",
-    "password": "password123"
-    }
+{
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
 ```
 
-## Response
-### Success (201 Created)
-- **Description**: User registered successfully.
-- **Body**:
-  ```json
-  {
-    "token": "jwt_token_here",
-    "user": {
-      "_id": "user_id_here",
-      "fullname": {
-        "firstname": "John",
-        "lastname": "Doe"
-      },
-      "email": "john.doe@example.com"
-    }
+### Response
+#### Success (201 Created)
+```json
+{
+  "token": "jwt_token_here",
+  "user": {
+    "_id": "user_id_here",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com"
   }
-  ```
+}
+```
 
-### Error (400 Bad Request)
-- **Description**: Validation error or missing required fields.
-- **Body**:
-  ```json
-  {
-    "errors": [
-      {
-        "msg": "Error message here",
-        "param": "field_name",
-        "location": "body"
-      }
-    ]
-  }
-  ```
+#### Error Responses
+- **400 Bad Request**: Validation error or missing required fields.
+- **500 Internal Server Error**: An error occurred on the server.
 
-### Error (500 Internal Server Error)
-- **Description**: An error occurred on the server.
-- **Body**:
-  ```json
-  {
-    "message": "Internal Server Error"
-  }
-  ```
+---
 
-# User Login Endpoint
+## User Login Endpoint
 
-## Endpoint
+### Endpoint
 `POST /users/login`
 
-## Description
-This endpoint logs in an existing user by accepting their email and password. It returns a JSON response containing an authentication token and the user details.
+### Description
+Authenticates a user using their email and password, returning a JWT token upon successful login.
 
-## HTTP Method
+### HTTP Method
+`POST`
 
-'POST'
-## Request Body
-The request body should be a JSON object with the following properties:
-- `email` (string, required): The user's email address (must be a valid email).
-- `password` (string, required): The user's password (minimum 6 characters).
-
-Example: User (Object)
+### Request Body
 ```json
-    {
-    "email": "john.doe@example.com",
-    "password": "password123"
-    }
+{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
 ```
 
-## Response
-### Success (200 OK)
-- **Description**: User logged in successfully.
-- **Body**:
-  ```json
-  {
-    "token": "jwt_token_here",
-    "user": {
-      "_id": "user_id_here",
-      "fullname": {
-        "firstname": "John",
-        "lastname": "Doe"
-      },
-      "email": "john.doe@example.com"
-    }
+### Response
+#### Success (200 OK)
+```json
+{
+  "token": "jwt_token_here",
+  "user": {
+    "_id": "user_id_here",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com"
   }
-  ```
+}
+```
 
-### Error (400 Bad Request)
-- **Description**: Validation error or missing required fields.
-- **Body**:
-  ```json
-  {
-    "errors": [
-      {
-        "msg": "Error message here",
-        "param": "field_name",
-        "location": "body"
-      }
-    ]
-  }
-  ```
+#### Error Responses
+- **400 Bad Request**: Validation error or missing required fields.
+- **401 Unauthorized**: Invalid email or password.
+- **500 Internal Server Error**: An error occurred on the server.
 
-### Error (401 Unauthorized)
-- **Description**: Invalid email or password.
-- **Body**:
-  ```json
-  {
-    "message": "Invalid Email or Password"
-  }
-  ```
+---
 
-### Error (500 Internal Server Error)
-- **Description**: An error occurred on the server.
-- **Body**:
-  ```json
-  {
-    "message": "Internal Server Error"
-  }
-  ```
+## Get User Profile Endpoint
+
+### Endpoint
+`GET /users/profile`
+
+### Description
+Retrieves the profile information of the currently authenticated user.
+
+### HTTP Method
+`GET`
+
+### Authentication Required
+Yes (JWT Token in Authorization header)
+
+### Response
+#### Success (200 OK)
+```json
+{
+  "id": "user_id_here",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com"
+}
+```
+
+#### Error Responses
+- **401 Unauthorized**: Authentication token is missing or invalid.
+- **500 Internal Server Error**: An error occurred on the server.
+
+---
+
+## User Logout Endpoint
+
+### Endpoint
+`POST /users/logout`
+
+### Description
+Logs out the current user and blacklists the token provided in the request.
+
+### HTTP Method
+`POST`
+
+### Authentication Required
+Yes (Valid JWT Token is required in Authorization header or cookie)
+
+### Response
+#### Success (200 OK)
+```json
+{
+  "success": true,
+  "message": "User logged out successfully"
+}
+```
+
+#### Error Responses
+- **401 Unauthorized**: Authentication token is missing or invalid.
+- **500 Internal Server Error**: An error occurred on the server.
+
