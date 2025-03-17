@@ -170,16 +170,22 @@ Registers a new captain by creating a captain account with the provided informat
 
 ### Request Body
 The request body should be a JSON object with the following properties:
-- `fullname` (object):
-  - `firstname` (string, required): Captain's first name (minimum 3 characters).
-  - `lastname` (string, required): Captain's last name (minimum 3 characters).
-- `email` (string, required): Captain's email address (must be a valid email).
-- `password` (string, required): Captain's password (minimum 6 characters).
-- `vehicle` (object):
-  - `color` (string, required): Vehicle color (minimum 3 characters).
-  - `plate` (string, required): Vehicle plate number (minimum 3 characters).
-  - `capacity` (number, required): Vehicle capacity (minimum 1).
-  - `vehicleType` (string, required): Vehicle type (must be one of 'car', 'motorcycle', 'auto').
+```json
+{
+  "fullname": {
+    "firstname": "Jane", // string, required, minimum 3 characters
+    "lastname": "Doe" // string, required, minimum 3 characters
+  },
+  "email": "jane.doe@example.com", // string, required, must be a valid email
+  "password": "password123", // string, required, minimum 6 characters
+  "vehicle": {
+    "color": "red", // string, required, minimum 3 characters
+    "plate": "XYZ123", // string, required, minimum 3 characters
+    "capacity": 4, // number, required, minimum 1
+    "vehicleType": "car" // string, required, must be one of 'car', 'motorcycle', 'auto'
+  }
+}
+```
 
 #### Example Request
 ```json
@@ -223,5 +229,122 @@ The request body should be a JSON object with the following properties:
 
 #### Error Responses
 - **400 Bad Request**: Validation error or missing required fields.
+- **500 Internal Server Error**: An error occurred on the server.
+
+---
+
+## Captain Login Endpoint
+
+### Endpoint
+`POST /captains/login`
+
+### Description
+Authenticates a captain using their email and password, returning a JWT token upon successful login.
+
+### HTTP Method
+`POST`
+
+### Request Body
+```json
+{
+  "email": "jane.doe@example.com", // string, required, must be a valid email
+  "password": "password123" // string, required, minimum 6 characters
+}
+```
+
+### Response
+#### Success (200 OK)
+```json
+{
+  "token": "jwt_token_here",
+  "captain": {
+    "_id": "captain_id_here",
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Doe"
+    },
+    "email": "jane.doe@example.com",
+    "vehicle": {
+      "color": "red",
+      "plate": "XYZ123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+#### Error Responses
+- **400 Bad Request**: Validation error or missing required fields.
+- **401 Unauthorized**: Invalid email or password.
+- **500 Internal Server Error**: An error occurred on the server.
+
+---
+
+## Get Captain Profile Endpoint
+
+### Endpoint
+`GET /captains/profile`
+
+### Description
+Retrieves the profile information of the currently authenticated captain.
+
+### HTTP Method
+`GET`
+
+### Authentication Required
+Yes (JWT Token in Authorization header)
+
+### Response
+#### Success (200 OK)
+```json
+{
+  "captain": {
+    "_id": "captain_id_here",
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Doe"
+    },
+    "email": "jane.doe@example.com",
+    "vehicle": {
+      "color": "red",
+      "plate": "XYZ123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+#### Error Responses
+- **401 Unauthorized**: Authentication token is missing or invalid.
+- **500 Internal Server Error**: An error occurred on the server.
+
+---
+
+## Captain Logout Endpoint
+
+### Endpoint
+`GET /captains/logout`
+
+### Description
+Logs out the current captain and blacklists the token provided in the request.
+
+### HTTP Method
+`GET`
+
+### Authentication Required
+Yes (Valid JWT Token is required in Authorization header or cookie)
+
+### Response
+#### Success (200 OK)
+```json
+{
+  "message": "Logout successfully"
+}
+```
+
+#### Error Responses
+- **401 Unauthorized**: Authentication token is missing or invalid.
 - **500 Internal Server Error**: An error occurred on the server.
 
