@@ -3,6 +3,7 @@ import { Routes } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 
 const Home  =() =>{
+    
     return(
         <div>
             <div className='bg-cover bg-center bg-[url(https://img.freepik.com/premium-photo/modern-traffic-light-showing-red-color-night-modern-city_153437-17.jpg?uid=R165339262&ga=GA1.1.1768963471.1725217503&semt=ais_keywords_boost)] h-screen pt-8 flex justify-between flex-col w-full bg-red-400'> 
